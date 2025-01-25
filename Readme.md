@@ -4,15 +4,19 @@
 
 ## Документация
 
-### 1. Спецификация REST API представлена в формате OpenAPI.
-
-* Post-Page/specification/post-page.spec.yml
-
-### 2. Инструкция по запуску проекта.
+### 1. Инструкцию по запуску проекта.
 
 * Post-Page/Workflow.md
 
-### 3. Для http запросов к серверу.
+### 2. Спецификация REST API представлена в формате OpenAPI.
+
+* Post-Page/specification/post-page.spec.yml
+
+### 3. Инструкция по запуску проекта.
+
+* Post-Page/Workflow.md
+
+### 4. Для http запросов к серверу.
 
 * Post-Page/src/modules/user/user.http
 * Post-Page/src/modules/record/record.http
