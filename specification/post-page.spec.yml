@@ -1,0 +1,268 @@
+openapi: '3.0.0'
+info:
+  title: API сервер для проекта «POST-PAGE».
+  description: Список ресурсов и маршрутов сервера «POST-PAGE».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: '1.0'
+tags:
+  - name: user
+    description: Действия с пользователем.
+  - name: record
+    description: Действия с записью.
+
+paths:
+  /user/registration:
+    post:
+      tags:
+        - user
+      summary: Регистрация пользователя
+      description: Регистрация нового пользователя
+
+      requestBody:
+        description: Информация для регистрации нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registrationUser'
+        required: true
+      
+      responses:
+        "201":
+          description: Пользователь зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataUser'
+
+        "400":
+          description: A user with name Vlad Vankov is exists.
+
+  /user/authentication:
+    get:  
+      tags:
+        - user
+      summary: Ресурс для аунтификации и авторизации пользователя
+      description: Авторизации пользователя
+
+      requestBody:
+        description: Информация для получения JWT-токена
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authenticationUser'
+        required: true
+
+      responses:
+        "200":
+          description: Аунтификации и авторизации пользователя прошла успешно 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accessToken'
+
+        "404":
+          description: User not found
+             
+        "401":
+           description: Incorrect user password
+
+  /record/picture:
+    post:
+      tags:
+        - record
+      summary: Загрузка картинки в файловую систему сервера
+      description:  В зоголовке Authorization, указать полученный accessToken.
+                    Получив http адрес картинки, укажите в поле message обЪекта записи
+
+      responses:
+        "201":
+          description: Загрузка картинки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/picture'
+
+        "500":
+          description: Bad accessToken, accessToken не соответствует типу
+
+        "401":
+          description: Invalid accessToken или Unauthorized
+
+        "400":
+           description: User Vlad Vankov is not in the database.
+
+  /record/:
+    post:
+      tags:
+        - record
+      summary: Запись блога
+      description: Ресурс доступин только авторизованным пользователям. 
+                   В зоголовке Authorization, указать полученный accessToken 
+                   
+      requestBody:
+        description: Информация для блога
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createRecord'
+        required: true 
+
+      responses:
+        "201":
+          description: Запись добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataRecord'
+
+        "500":
+          description: Bad accessToken, accessToken не соответствует типу
+
+        "401":
+          description: Invalid accessToken или Unauthorized
+
+        "400":
+           description: User Vlad Vankov is not in the database.
+
+  /record/redaction/{idRecord}:
+    patch:
+      tags:
+        - record
+      summary: Редактирование записи
+      description: Ресурс доступин только авторизованным пользователям. 
+                   В зоголовке Authorization, указать полученный accessToken.
+                   В параметре idRecord указать полученный id записи.
+
+      requestBody:
+        description: Информация для редактирования записи
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createRecord'
+        required: true 
+
+      responses:
+        "200":
+          description: Запись отредактирована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dataRecord'
+
+        "500":
+          description: Bad accessToken, accessToken не соответствует типу
+
+        "401":
+          description: Invalid accessToken или Unauthorized
+
+        "400":
+           description: User Vlad Vankov is not in the database или Record does not exist in the database.           
+
+  /record/delete/{idRecord}:
+    delete:
+      tags:
+        - record
+      summary: Удаление записи
+      description: Ресурс доступин только авторизованным пользователям. 
+                   В зоголовке Authorization, указать полученный accessToken.
+                   В параметре idRecord указать полученный id записи.
+      
+      responses:
+        "200":
+          description: The recording is deleted.
+
+        "500":
+          description: Bad accessToken, accessToken не соответствует типу
+
+        "401":
+          description: Invalid accessToken или Unauthorized
+
+        "400":
+           description: User Vlad Vankov is not in the database или Record does not exist in the database.
+
+components:
+  schemas:
+    authenticationUser:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Vlad Vankov
+
+        password:
+          type: string
+          example: 4891
+
+    dataUser:
+      type:  object
+
+      properties:
+        id:
+          type: number
+          example: 1 
+
+        name:
+          type: string
+          example: Vlad Vankov
+
+    registrationUser:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Vlad Vankov
+
+        password:
+          type: string
+          example: 4891
+
+    accessToken:
+      type: object
+
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+    createRecord:
+      type: object
+
+      properties:
+        message:
+          type: string
+          example: Интересный блог.
+
+    dataRecord:
+      type: object
+
+      properties:
+        dataCreat:
+          type: string
+          example:  2019-01-25T00:00:00-02:00Z.
+
+        message:
+          type: string
+          example: Интересный блог.
+
+        id:
+          type: number
+          example: 1
+
+        user:
+          type: object
+          example: {
+            id: 1,
+            name: Vlad Vankov
+          }
+
+    picture:
+      type: object
+       
+      properties:
+        filename:
+          type: object
+          example: http://localhost:3000/upload/2025/01/e1adb908-191f-4e09-8aca-3d39afdae218.jpg

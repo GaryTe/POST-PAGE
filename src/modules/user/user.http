@@ -1,0 +1,18 @@
+# User registration
+POST  http://localhost:3000/user/registration HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Sveta",
+  "password": "4891"
+}
+
+###
+# User authorization 
+GET   http://localhost:3000/user/authentication HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Sveta",
+  "password": "4891"
+}

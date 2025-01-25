@@ -1,0 +1,37 @@
+# Creating a new record
+POST  http://localhost:3000/record/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiU3ZldGEiLCJpYXQiOjE3Mzc4MTY2MjUsImV4cCI6MTczNzkwMzAyNX0.Y6DQj8Rsa-dQEbwAvZmlYraaZpVlI7UNxv8cqQeYfKo
+
+{
+  "message": "http://localhost:3000/upload/2025/01/e1adb908-191f-4e09-8aca-3d39afdae218.jpg"
+}
+
+###
+# Record editing
+PATCH http://localhost:3000/record/redaction/2 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiU3ZldGEiLCJpYXQiOjE3Mzc4MTY2MjUsImV4cCI6MTczNzkwMzAyNX0.Y6DQj8Rsa-dQEbwAvZmlYraaZpVlI7UNxv8cqQeYfKo
+
+{
+  "message": "Хватит обнавлять данные !!!."
+}
+
+###
+## Deleting a record
+DELETE http://localhost:3000/record/delete/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiU3ZldGEiLCJpYXQiOjE3Mzc4MTY2MjUsImV4cCI6MTczNzkwMzAyNX0.Y6DQj8Rsa-dQEbwAvZmlYraaZpVlI7UNxv8cqQeYfKo
+
+###
+## Отправить изображение
+POST http://localhost:3000/record/picture HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiU3ZldGEiLCJpYXQiOjE3Mzc4MTY2MjUsImV4cCI6MTczNzkwMzAyNX0.Y6DQj8Rsa-dQEbwAvZmlYraaZpVlI7UNxv8cqQeYfKo
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="picture"; filename="room.jpg"
+Content-Type: image/png
+
+< C:/Users/User/Desktop/Post-Page/markup/img/room.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+

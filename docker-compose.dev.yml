@@ -1,0 +1,42 @@
+services:
+  post.page.postgres:
+    image: postgres:14-alpine
+    container_name: post.page.postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - post.page.blog:/var/lib/postgres/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d {POSTGRES_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - post.page
+
+  post.page.pgadmin:
+    image: dpage/pgadmin4
+    container_name: post.page.pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - 8082:80
+    networks:
+      - post.page
+
+volumes:
+  post.page.blog:
+
+networks:
+  post.page:
+      driver: bridge
+
