@@ -12,7 +12,7 @@ export type DataUaer = {
 export type DataRecord = {
     dataCreat: string;
     message: string;
-    id: number;
+    id: string;
 }
 
 export type TokenPayload = {

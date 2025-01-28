@@ -1,6 +1,6 @@
 import * as crypto from 'node:crypto';
 
-import {ApplicationError} from './enum/index.js'
+import {ApplicationError} from './enum/index.js';
 
 export const createSHA256 = (password: string, salt: string): string => {
     const shaHasher = crypto.createHmac('sha256', salt);

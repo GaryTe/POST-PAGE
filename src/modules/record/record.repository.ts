@@ -1,65 +1,50 @@
-import pg, {QueryResult} from 'pg';
-
 import {CreateRecordDto, RedactionRecordDto} from './dto/index.js';
 import {DataRecord} from '../../shared/type.js';
-import {WAITING_TIME, CLIENT_INACTIVITY_TIME} from '../../shared/const.js';
-
-let client: pg.Pool;
+import {appDataSource} from '../../main.js';
 
 export class RecordRepository {
-  constructor() {
-    const { Pool } = pg;
-    client = new Pool({
-        user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        host: process.env.HOST,
-        port: Number(process.env.POSTGRES_PORT),
-        database: process.env.POSTGRES_DB,
-        connectionTimeoutMillis: WAITING_TIME,
-        idleTimeoutMillis: CLIENT_INACTIVITY_TIME
-    });
-  }
+  constructor() {}
 
   public async create(dto: CreateRecordDto): Promise<DataRecord> {
     const {message, idUser} = dto;
 
-    const dataRecord: QueryResult = await client.query(`
+    const dataRecord = await appDataSource.manager.query(`
       INSERT INTO records
       VALUES (DEFAULT, DEFAULT, $1, $2)
-      RETURNING 
-      records.created_at AS "dataCreat",
+      RETURNING
+      creat_at AS "dataCreat",
       records.message,
       records.id
       `,
-    [message, Number(idUser)]
+    [message, idUser]
     );
 
-    return dataRecord.rows.find((item: DataRecord) => item);
+    return dataRecord.find((item: DataRecord) => item);
   }
 
   public async editing({message, idRecord, idUser}: RedactionRecordDto): Promise<DataRecord> {
-    const dataFilm: QueryResult = await client.query(`
+    const dataFilm = await appDataSource.manager.query(`
       UPDATE records
       SET message = $1
       WHERE records.id = $2 AND records.id_user = $3
       RETURNING
-      records.created_at AS "dataCreat",
+      creat_at AS "dataCreat",
       records.message,
       records.id
       `,
-    [message, Number(idRecord), Number(idUser)]
+    [message, idRecord, idUser]
     );
 
-    return dataFilm.rows.find((item: DataRecord) => item);
+    return dataFilm.find((item: DataRecord) => item).find((item: DataRecord) => item);
   }
 
   public async delete({idRecord, idUser}: {idRecord: string, idUser: string}): Promise<string> {
-        await client.query(`
+        await appDataSource.manager.query(`
           DELETE FROM records
           WHERE records.id = $1 AND records.id_user = $2
           RETURNING *
           `,
-        [Number(idRecord), Number(idUser)]
+        [idRecord, idUser]
         );
     
         return 'The recording is deleted.';

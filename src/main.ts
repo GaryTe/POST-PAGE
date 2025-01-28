@@ -1,13 +1,15 @@
 import express, {Express} from 'express';
+import {DataSource} from 'typeorm';
 import 'dotenv/config'
+import 'reflect-metadata'
 
-import {info} from './shared/logger.js';
+import {info, mistake} from './shared/logger.js';
 import {UserController} from './modules/user/user.controller.js';
 import {RecordController} from './modules/record/record.controller.js';
 import {AppExceptionFilter, HttpExceptionFilter, AuthenticationExceptionFilter} from './shared/libs/index.js';
 import {ParseAccessTokenMiddleware} from '../src/shared/middleware/index.js';
 import {checkingEnvironmentVariables} from './shared/util.js';
-import {STATIC_UPLOAD_ROUTE} from './shared/const.js';
+import {STATIC_UPLOAD_ROUTE, WAITING_TIME} from './shared/const.js';
 
 const server: Express = express();
 
@@ -37,8 +39,30 @@ const initExceptionFilters = async () => {
   }
 
   info('Checking environment variables.');
-  checkingEnvironmentVariables()
+   checkingEnvironmentVariables()
   info('Environment variables check completed successfully.')
+
+  info('Try to connect to Postgres.');
+  export const appDataSource: DataSource = new DataSource({
+    type: 'postgres',
+    entities: ['src/modules/user/user-entity.ts', 'src/modules/record/record-entity.ts'],
+    synchronize: true,
+    host: process.env.HOST,
+    port: Number(process.env.POSTGRES_PORT),
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    connectTimeoutMS: WAITING_TIME
+    });
+
+    await appDataSource.initialize()
+    .then(() => {
+        info('Connection established to Postgres !!!')
+    })
+    .catch((err) => {
+        mistake('Connect error to Postgres !!!', err)
+    })
+
 
   info('Init express middleware');
   await initMiddleware();
