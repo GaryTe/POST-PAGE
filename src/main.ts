@@ -29,6 +29,10 @@ const initMiddleware = async () => {
         STATIC_UPLOAD_ROUTE,
         express.static(process.env.UPLOAD_DIRECTORY as string)
       );
+      server.use(
+        STATIC_UPLOAD_ROUTE,
+        express.static(process.env.UPLOAD_VIDEO_DIRECTORY as string)
+      );
     server.use(new ParseAccessTokenMiddleware().execute)
 }
 

@@ -1,10 +1,10 @@
 # Creating a new record
 POST  http://localhost:3000/record/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyMDJiMjlmLTg1MTItNDMxNC04OTJlLWQ3MzIxYTk0Y2Y4YSIsIm5hbWUiOiJWbGFkIiwiaWF0IjoxNzM4MDYyODk5LCJleHAiOjE3MzgxNDkyOTl9.-qNzqOxv0qAc9f35nCmOayFH8JctlpoXesAoq3-696Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyMDJiMjlmLTg1MTItNDMxNC04OTJlLWQ3MzIxYTk0Y2Y4YSIsIm5hbWUiOiJWbGFkIiwiaWF0IjoxNzM4MjI0MjMzLCJleHAiOjE3MzgzMTA2MzN9.e90u4GOL05cNJfakqy_sHChtUUtSwvCXfkxXJujFOcc
 
 {
-  "message": "Новая запись от Светы."
+  "message": "http://localhost:3000/upload/2025/01/ad355e1c-1d21-4328-a54b-a8bcafc41957.mp4"
 }
 
 ###
@@ -35,3 +35,15 @@ Content-Type: image/png
 < C:/Users/User/Desktop/Post-Page/markup/img/room.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+###
+## Отправить видео
+POST http://localhost:3000/record/video HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyMDJiMjlmLTg1MTItNDMxNC04OTJlLWQ3MzIxYTk0Y2Y4YSIsIm5hbWUiOiJWbGFkIiwiaWF0IjoxNzM4MjI0MjMzLCJleHAiOjE3MzgzMTA2MzN9.e90u4GOL05cNJfakqy_sHChtUUtSwvCXfkxXJujFOcc
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="video"; filename="video-e92f35b04456131099961e1128415432-V.mp4"
+Content-Type: video/mp4
+
+< C:\Users\User\Desktop\Post-Page\markup\video\video-e92f35b04456131099961e1128415432-V.mp4
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

@@ -13,3 +13,4 @@ coverage
 .env
 
 /src/pictures/
+/src/video/

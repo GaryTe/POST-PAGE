@@ -80,9 +80,34 @@ paths:
         "201":
           description: Загрузка картинки
           content:
-            application/json:
+            multipart/form-data:
               schema:
                 $ref: '#/components/schemas/picture'
+
+        "500":
+          description: Bad accessToken, accessToken не соответствует типу
+
+        "401":
+          description: Invalid accessToken или Unauthorized
+
+        "400":
+           description: User Vlad Vankov is not in the database.
+
+  /record/video:
+    post:
+      tags:
+        - record
+      summary: Загрузка видео в файловую систему сервера
+      description:  В зоголовке Authorization, указать полученный accessToken.
+                    Получив http адрес видео, укажите в поле message обЪекта записи
+
+      responses:
+        "201":
+          description: Загрузка видео
+          content:
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/video'
 
         "500":
           description: Bad accessToken, accessToken не соответствует типу
@@ -266,3 +291,11 @@ components:
         filename:
           type: object
           example: http://localhost:3000/upload/2025/01/e1adb908-191f-4e09-8aca-3d39afdae218.jpg
+
+    video:
+      type: object
+       
+      properties:
+        filename:
+          type: object
+          example: http://localhost:3000/upload/2025/01/ad355e1c-1d21-4328-a54b-a8bcafc41957.mp4
