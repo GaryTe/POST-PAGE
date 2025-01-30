@@ -33,6 +33,16 @@ export class RecordController extends Controller {
       ]
     });
     this.addRoute({
+      path: '/video',
+      method: HttpMethod.Post,
+      handler: this.uploadVideo,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new CheckUserMiddleware(),
+        new UploadPictureMiddleware(process.env.UPLOAD_VIDEO_DIRECTORY as string, 'video'),
+      ]
+    });
+    this.addRoute({
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
@@ -65,6 +75,14 @@ export class RecordController extends Controller {
   }
 
   public async uploadPicture({file}: Request, res: Response) {
+    const filename = file?.filename as string;
+    const path = file?.destination.split('/') as unknown as string[];
+    this.created(res, {
+      filename: `http://${process.env.HOST}:${process.env.PORT}${STATIC_UPLOAD_ROUTE}/${path[path.length - 2]}/${path[path.length - 1]}/${filename}`
+    });
+  }
+
+  public async uploadVideo({file}: Request, res: Response) {
     const filename = file?.filename as string;
     const path = file?.destination.split('/') as unknown as string[];
     this.created(res, {
